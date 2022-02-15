@@ -19,11 +19,6 @@ export default {
   components: {
     InitialScreen,
   },
-  data() {
-    return {
-      difficulty: "hard",
-      gameHasStarted: false,
-    };
-  },
+  
 };
 </script>

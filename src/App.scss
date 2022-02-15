@@ -1,0 +1,56 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap");
+
+$app-bg: #10c410d0;
+$main-shadow: #0c8b0c;
+$text: #000;
+$main-bg: #eeffe8;
+$checkmark-checked: #18b633;
+$button: #18b633;
+$button-hover: #127c24;
+$checkmark: #c0c0c0;
+$checkmark-hover: #8d8d8d;
+$input-border: #004200;
+
+@mixin flex($direction: column, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+* {
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+#app {
+  @include flex;
+  min-height: 100vh;
+  background: $app-bg;
+  font-family: "Lato", sans-serif;
+
+  main {
+    @include flex;
+    gap: 10px;
+    background: $main-bg;
+    width: min(90%, 500px);
+    box-shadow: 0px 0px 10px $main-shadow;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+
+    h1 {
+      padding-top: 5px;
+      color: $text;
+      font-size: 1.6rem;
+    }
+
+    h2 {
+      max-width: 85%;
+      margin: auto;
+    }
+  }
+}

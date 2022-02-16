@@ -2,7 +2,7 @@
   <div class="initial-screen" v-if="!gameHasStarted">
     <h2>Choose the difficulty</h2>
     <div class="difficulties">
-      <label id="oi">
+      <label>
         <input
           @click="changeDifficulty($event)"
           type="radio"
@@ -78,6 +78,10 @@ export default {
     },
     startTheGame() {
       this.gameHasStarted = true;
+      this.$emit("gameStart", {
+        difficulty: this.difficulty,
+        gameHasStarted: this.gameHasStarted,
+      });
     },
   },
   data() {

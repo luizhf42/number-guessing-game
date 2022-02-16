@@ -16,7 +16,6 @@ export default {
   },
   methods: {
     buttonClick() {
-      console.log(this.gameHasStarted);
       if (!this.gameHasStarted) {
         this.gameHasStarted = true;
         this.$emit("gameStart", this.gameHasStarted);

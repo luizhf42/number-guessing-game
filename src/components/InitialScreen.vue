@@ -57,14 +57,12 @@
       <span v-if="difficulty == 'hard'">100</span>
       <span v-if="difficulty == 'very-hard'">1000</span>
     </h2>
-    <!-- <Button
-        text="Start the game!"
-        gameHasStarted="{gameHasStarted}"
-        setGameHasStarted="{setGameHasStarted}"
-        startTheGame="{startTheGame}"
-      /> -->
+    <Button
+      text="Start the game!"
+      :gameHasStartedProp="gameHasStarted"
+      @gameStart="startTheGame()"
+    />
   </div>
-  <Button text="Start the game!" :gameHasStarted="gameHasStarted" />
 </template>
 
 <script>
@@ -77,6 +75,9 @@ export default {
   methods: {
     changeDifficulty(event) {
       this.difficulty = event.target.id;
+    },
+    startTheGame() {
+      this.gameHasStarted = true;
     },
   },
   data() {

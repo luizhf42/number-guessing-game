@@ -7,13 +7,19 @@ export default {
   name: "Button",
   props: {
     text: String,
-    gameHasStarted: Boolean,
+    gameHasStartedProp: Boolean,
+  },
+  data() {
+    return {
+      gameHasStarted: this.gameHasStartedProp,
+    };
   },
   methods: {
     buttonClick() {
+      console.log(this.gameHasStarted);
       if (!this.gameHasStarted) {
         this.gameHasStarted = true;
-        console.log(this.gameHasStarted);
+        this.$emit("gameStart", this.gameHasStarted);
       }
     },
   },

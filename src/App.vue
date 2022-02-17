@@ -1,15 +1,13 @@
 <template>
   <main>
     <h1>Guess the number! 🐢</h1>
-    <InitialScreen @gameStart="startTheGame" />
-    <!-- {gameHasStarted && (
+    <InitialScreen @gameStart="startTheGame" v-if="!gameHasStarted" />
+
     <GameScreen
-      maximumNumber="{inputMaximumNumber}"
-      chances="{chances}"
-      randomNumber="{randomNumber}"
+      v-if="gameHasStarted"
+      @resetGame="resetGame"
+      :difficultyProp="difficulty"
     />
-    )} -->
-    <GameScreen v-if="gameHasStarted" :difficultyProp="difficulty" />
   </main>
 </template>
 
@@ -27,6 +25,9 @@ export default {
     startTheGame({ difficulty, gameHasStarted }) {
       this.difficulty = difficulty;
       this.gameHasStarted = gameHasStarted;
+    },
+    resetGame() {
+      this.gameHasStarted = false;
     },
   },
   data() {

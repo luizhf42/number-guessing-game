@@ -1,9 +1,12 @@
 <template>
   <section class="game" @load="setGameConfigs">
-    <h2>Choose a number between 1 and {{ this.maximumNumber }}</h2>
+    <h2 :style="[gameHasFinished ? 'text-decoration: line-through' : '']">
+      Choose a number between 1 and {{ this.maximumNumber }}
+    </h2>
 
-    <form>
+    <form @submit="checkGuess($event)">
       <input
+        :readonly="gameHasFinished"
         v-model="guess"
         type="number"
         id="input"
@@ -11,22 +14,34 @@
         :max="maximumNumber"
         placeholder="Glory number"
       />
-      <Button text="Guesstimate!" />
+      <div class="btn-container" v-if="!gameHasFinished">
+        <Button text="Guesstimate!" :gameHasFinished="gameHasFinished" />
+      </div>
     </form>
 
-    <p>Remaining chances: {{ remainingChances }}</p>
+    <p v-if="this.remainingChances">
+      Remaining chances: {{ remainingChances }}
+    </p>
 
-    <!-- {showResult && (
-    <Result guessResult="{guessResult}" submittedGuess="{submittedGuess}" />
-    )} -->
+    <p class="message" v-show="showMessage">{{ message }}</p>
+
+    <Final
+      v-if="gameHasFinished"
+      :userWon="this.userWon"
+      @resetGame="this.$emit('resetGame')"
+    />
   </section>
 </template>
 
 <script>
+import anime from "animejs";
 import Button from "./Button.vue";
+import Final from "./Final.vue";
+
 export default {
   name: "GameScreen",
   components: {
+    Final,
     Button,
   },
   props: {
@@ -38,6 +53,11 @@ export default {
       maximumNumber: 50,
       remainingChances: 0,
       guess: "",
+      randomNumber: 0,
+      message: "",
+      showMessage: false,
+      gameHasFinished: false,
+      userWon: false,
     };
   },
   mounted() {
@@ -63,6 +83,66 @@ export default {
         this.remainingChances = 6;
         break;
     }
+    this.randomNumber = this.randomizeNumber();
+  },
+  methods: {
+    checkGuess(event) {
+      event.preventDefault();
+      const guess = this.guess;
+      const randomNumber = this.randomNumber;
+      if (guess) {
+        if (this.remainingChances) {
+          if (guess == randomNumber) {
+            this.message = `Congratulations! The random number was ${randomNumber}!`;
+            this.gameHasFinished = true;
+            this.remainingChances = 0;
+            this.userWon = true;
+          } else if (guess != randomNumber && this.remainingChances <= 1) {
+            this.message = `Your guess was wrong and the chances are over. You lose! The random number was ${randomNumber}.`;
+            this.gameHasFinished = true;
+            this.remainingChances--;
+          } else if (guess > randomNumber) {
+            this.message = `Your guess (${guess}) was too high! Try again.`;
+            this.remainingChances--;
+          } else if (guess < randomNumber) {
+            this.message = `Your guess (${guess}) was too low! Try again.`;
+            this.remainingChances--;
+          }
+        }
+
+        this.showMessage = true;
+        if (!this.gameHasFinished) this.guess = "";
+      } else {
+        anime({
+          targets: "#input",
+          easing: "easeInOutSine",
+          duration: 550,
+          translateX: [
+            {
+              value: -16,
+            },
+            {
+              value: 16,
+            },
+            {
+              value: -8,
+            },
+            {
+              value: 8,
+            },
+            {
+              value: 0,
+            },
+          ],
+        });
+      }
+    },
+
+    randomizeNumber() {
+      const randomNumber = Math.round(Math.random() * this.maximumNumber);
+      console.log(randomNumber);
+      return randomNumber;
+    },
   },
 };
 </script>
@@ -75,7 +155,7 @@ $input-border: 1px solid App.$input-border;
 .game {
   width: 100%;
   @include App.flex();
-  gap: 10px;
+  gap: 12px;
 
   form {
     @extend .game;
@@ -91,8 +171,22 @@ $input-border: 1px solid App.$input-border;
       }
       &::placeholder {
         font-family: inherit;
+        color: #5d875d;
       }
     }
+
+    .btn-container {
+      @extend .game;
+    }
+  }
+
+  h2 {
+    margin-bottom: 0 !important;
+  }
+
+  .message {
+    // font-weight: 700;
+    font-size: 1.1rem;
   }
 }
 </style>

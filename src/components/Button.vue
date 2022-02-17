@@ -8,10 +8,12 @@ export default {
   props: {
     text: String,
     gameHasStartedProp: Boolean,
+    gameHasFinishedProp: Boolean,
   },
   data() {
     return {
       gameHasStarted: this.gameHasStartedProp,
+      gameHasFinished: this.gameHasFinishedProp,
     };
   },
   methods: {
@@ -19,6 +21,9 @@ export default {
       if (!this.gameHasStarted) {
         this.gameHasStarted = true;
         this.$emit("gameStart", this.gameHasStarted);
+      }
+      if (this.gameHasFinished) {
+        this.$emit("resetGame");
       }
     },
   },
@@ -43,5 +48,9 @@ button {
   &:hover {
     background: App.$button-hover;
   }
+  // &:disabled {
+  //   background: App.$button-disabled;
+  //   cursor: default;
+  // }
 }
 </style>

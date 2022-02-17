@@ -7,6 +7,7 @@
     <form @submit="checkGuess($event)">
       <input
         :readonly="gameHasFinished"
+        autocomplete="off"
         v-model="guess"
         type="number"
         id="input"
@@ -140,7 +141,6 @@ export default {
 
     randomizeNumber() {
       const randomNumber = Math.round(Math.random() * this.maximumNumber);
-      console.log(randomNumber);
       return randomNumber;
     },
   },

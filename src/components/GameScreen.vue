@@ -9,6 +9,7 @@
         :readonly="gameHasFinished"
         autocomplete="off"
         v-model="guess"
+        ref="input"
         type="number"
         id="input"
         min="1"
@@ -85,6 +86,7 @@ export default {
         break;
     }
     this.randomNumber = this.randomizeNumber();
+    this.$refs.input.focus();
   },
   methods: {
     checkGuess(event) {
